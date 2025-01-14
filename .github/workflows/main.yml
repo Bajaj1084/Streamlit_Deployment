@@ -44,8 +44,17 @@ jobs:
           SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.SF_DATABASE }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+ 
           
         run: |
+          echo "SF_ACCOUNT=$SF_ACCOUNT" >> env_debug.log
+          echo "SF_USERNAME=$SF_USERNAME" >> env_debug.log
+          echo "SF_ROLE=$SF_ROLE" >> env_debug.log
+          echo "SF_WAREHOUSE=$SF_WAREHOUSE" >> env_debug.log
+          echo "SF_DATABASE=$SF_DATABASE" >> env_debug.log
+          echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}" >> env_debug.log
+
+    
           echo "Debugging Environment Variables:"
           echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}"
           echo "SF_ACCOUNT length: ${#SF_ACCOUNT}"
