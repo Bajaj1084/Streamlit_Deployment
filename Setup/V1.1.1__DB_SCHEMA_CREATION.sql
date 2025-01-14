@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS st_db;
-use database st_db;
-CREATE schema IF NOT EXISTS st_db.st_schema;
-use schema st_schema;
+CREATE DATABASE IF NOT EXISTS streamlit_db;
+use database streamlit_db;
+CREATE schema IF NOT EXISTS streamlit_db.streamlit_schema;
+use schema streamlit_schema;
