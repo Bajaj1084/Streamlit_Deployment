@@ -29,14 +29,13 @@ jobs:
         shell: bash
         env:
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
-          SNOWFLAKE_USER: ${{ secrets.SF_USERNAME }}
+        
         
       
         run: |
           mkdir -p ~/.snowflake
           cp ./config/config.toml ~/.snowflake/config.toml
           echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
-          echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
           chmod 0600 ~/.snowflake/config.toml
           
       - name: Run schemachange
