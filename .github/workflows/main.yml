@@ -27,13 +27,17 @@ jobs:
 
       - name: 'Create config'
         shell: bash
+       
         env:
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+
+      
         
         
       
         run: |
-
+          
+          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
           mkdir -p ~/.snowflake
           cat <<EOF > ~/.snowflake/config.toml
           [connections.default]
@@ -61,11 +65,7 @@ jobs:
         run: |
             echo "Password length: ${#SNOWFLAKE_PASSWORD}"
 
-      - name: Debug Secrets
-        run: |
-            echo "Password length: ${#SNOWFLAKE_PASSWORD}"
-        env:
-          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+     
     
       - name: Run schemachange
         
