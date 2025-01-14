@@ -56,6 +56,10 @@ jobs:
       - name: Debug config
         run: |
             cat ~/.snowflake/config.toml
+
+      - name: Debug Environment Variables
+        run: |
+            echo "Password length: ${#SNOWFLAKE_PASSWORD}"
     
       - name: Run schemachange
         
