@@ -82,7 +82,7 @@ jobs:
           pip install schemachange
           
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
+          #schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
           #schemachange -f $GITHUB_WORKSPACE/Setup -c $GITHUB_WORKSPACE/config.toml --create-change-history-table
           #schemachange -f $GITHUB_WORKSPACE/Setup -c ~/.snowflake/config.toml --create-change-history-table
           # schemachange -f $GITHUB_WORKSPACE/Setup \
@@ -93,3 +93,5 @@ jobs:
           # -s "STREAMLIT_SCHEMA" \
           # -w "YOUR_WAREHOUSE" \
           # --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
+
