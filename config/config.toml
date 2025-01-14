@@ -1,8 +1,6 @@
 [connections.default]
 account = "axivxno-bwb79529"
 region = "us-west-2"
-user = "sftraining"
-User = "sftraining"
 role = "ACCOUNTADMIN"
 schema="STREAMLIT_SCHEMA"
 database="STREAMLIT_DB"
