@@ -51,7 +51,12 @@ jobs:
           # cp ./config/config.toml ~/.snowflake/config.toml
           # echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
           # chmod 0600 ~/.snowflake/config.toml
-          
+
+
+      - name: Debug config
+        run: |
+            cat ~/.snowflake/config.toml
+    
       - name: Run schemachange
         
           
@@ -63,4 +68,4 @@ jobs:
           
           echo "Step 2: Running schemachange"
           #schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
-          schemachange -f $GITHUB_WORKSPACE/Setup -c $GITHUB_WORKSPACE/connections.toml --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/Setup -c $GITHUB_WORKSPACE/config.toml --create-change-history-table
