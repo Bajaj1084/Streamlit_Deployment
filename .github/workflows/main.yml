@@ -31,11 +31,15 @@ jobs:
           echo "SF_WAREHOUSE=${{ secrets.SF_WAREHOUSE }}" >> $GITHUB_ENV
           echo "SF_DATABASE=${{ secrets.SF_DATABASE }}" >> $GITHUB_ENV
 
-      - name: Debug Environment Variables
+      - name: Debug Environment Variables Length
         run: |
-          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
-          echo "Account: $SF_ACCOUNT"
-          echo "User: $SF_USERNAME"
+          echo "Debugging Environment Variables:"
+          echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}"
+          echo "SF_ACCOUNT length: ${#SF_ACCOUNT}"
+          echo "SF_USERNAME length: ${#SF_USERNAME}"
+          echo "SF_ROLE length: ${#SF_ROLE}"
+          echo "SF_WAREHOUSE length: ${#SF_WAREHOUSE}"
+          echo "SF_DATABASE length: ${#SF_DATABASE}"
 
       - name: Create config
         shell: bash
@@ -55,18 +59,19 @@ jobs:
 
       - name: Debug config
         run: |
+          echo "Contents of config.toml:"
           cat ~/.snowflake/config.toml
-
-      - name: Debug Environment Variablesss
-        run: |
-          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
-          echo "Account: $SF_ACCOUNT"
-          echo "User: $SF_USERNAME"
 
       - name: Run schemachange
         run: |
           python --version
           pip install schemachange
+          echo "Running schemachange with the following parameters:"
+          echo "Account: $SF_ACCOUNT"
+          echo "Role: $SF_ROLE"
+          echo "Database: $SF_DATABASE"
+          echo "Warehouse: $SF_WAREHOUSE"
+          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
           schemachange -f $GITHUB_WORKSPACE/Setup \
             -a "$SF_ACCOUNT" \
             -u "$SF_USERNAME" \
