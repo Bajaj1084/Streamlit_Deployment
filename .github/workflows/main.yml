@@ -57,6 +57,12 @@ jobs:
         run: |
           cat ~/.snowflake/config.toml
 
+      - name: Debug Environment Variablesss
+        run: |
+          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
+          echo "Account: $SF_ACCOUNT"
+          echo "User: $SF_USERNAME"
+
       - name: Run schemachange
         run: |
           python --version
