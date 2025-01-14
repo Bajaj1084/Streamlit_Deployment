@@ -60,6 +60,10 @@ jobs:
       - name: Debug Environment Variables
         run: |
             echo "Password length: ${#SNOWFLAKE_PASSWORD}"
+
+      - name: Debug Secrets
+        run: |
+            echo "Password length: ${#SNOWFLAKE_PASSWORD}"
         env:
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
     
