@@ -1,6 +1,5 @@
 name: snowflake-devops-demo
 
-# Controls when the action will run. 
 on:
   push:
     branches:
@@ -8,7 +7,6 @@ on:
     paths:
       - 'Setup/**'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -16,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -25,73 +22,64 @@ jobs:
         with:
           python-version: 3.8.x
 
-      - name: 'Create config'
-        shell: bash
-       
-        env:
-          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_DATABASE: ${{ secrets.SF_DATABASE }}
-
-      
-        
-        
-      
+      - name: Set Environment Variables
         run: |
-          
+          echo "SNOWFLAKE_PASSWORD=${{ secrets.SF_PASSWORD }}" >> $GITHUB_ENV
+          echo "SF_ACCOUNT=${{ secrets.SF_ACCOUNT }}" >> $GITHUB_ENV
+          echo "SF_USERNAME=${{ secrets.SF_USERNAME }}" >> $GITHUB_ENV
+          echo "SF_ROLE=${{ secrets.SF_ROLE }}" >> $GITHUB_ENV
+          echo "SF_WAREHOUSE=${{ secrets.SF_WAREHOUSE }}" >> $GITHUB_ENV
+          echo "SF_DATABASE=${{ secrets.SF_DATABASE }}" >> $GITHUB_ENV
+
+      - name: Debug Environment Variables
+        run: |
+          echo "Password length: ${#SNOWFLAKE_PASSWORD}"
+          echo "Account: $SF_ACCOUNT"
+          echo "User: $SF_USERNAME"
+
+      - name: Create config
+        shell: bash
+        run: |
           echo "Password length: ${#SNOWFLAKE_PASSWORD}"
           mkdir -p ~/.snowflake
           cat <<EOF > ~/.snowflake/config.toml
           [connections.default]
-          account = "axivxno-bwb79529"
-          region = "us-west-2"
-          role = "ACCOUNTADMIN"
+          account = "$SF_ACCOUNT"
+          role = "$SF_ROLE"
           schema = "STREAMLIT_SCHEMA"
-          database = "STREAMLIT_DB"
-          user = "sftraining"
+          database = "$SF_DATABASE"
+          user = "$SF_USERNAME"
           password = "$SNOWFLAKE_PASSWORD"
           EOF
           chmod 0600 ~/.snowflake/config.toml
-    
-          # mkdir -p ~/.snowflake
-          # cp ./config/config.toml ~/.snowflake/config.toml
-          # echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
-          # chmod 0600 ~/.snowflake/config.toml
-
 
       - name: Debug config
         run: |
-            cat ~/.snowflake/config.toml
+          cat ~/.snowflake/config.toml
 
-      - name: Debug Environment Variables
-        run: |
-            echo "Password length: ${#SNOWFLAKE_PASSWORD}"
-
-     
-    
       - name: Run schemachange
-        
-          
         run: |
-          
           python --version
-          echo "Step 1: Installing schemachange"
           pip install schemachange
-          
-          echo "Step 2: Running schemachange"
+          schemachange -f $GITHUB_WORKSPACE/Setup \
+            -a "$SF_ACCOUNT" \
+            -u "$SF_USERNAME" \
+            -r "$SF_ROLE" \
+            -d "$SF_DATABASE" \
+            -s "STREAMLIT_SCHEMA" \
+            -w "$SF_WAREHOUSE" \
+            --create-change-history-table
+
           #schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
           #schemachange -f $GITHUB_WORKSPACE/Setup -c $GITHUB_WORKSPACE/config.toml --create-change-history-table
           #schemachange -f $GITHUB_WORKSPACE/Setup -c ~/.snowflake/config.toml --create-change-history-table
-          schemachange -f $GITHUB_WORKSPACE/Setup \
-          -a "axivxno-bwb79529" \
-          -u "sftraining" \
-          -r "ACCOUNTADMIN" \
-          -d "STREAMLIT_DB" \
-          -s "STREAMLIT_SCHEMA" \
-          -w "YOUR_WAREHOUSE" \
-          --create-change-history-table
+          # schemachange -f $GITHUB_WORKSPACE/Setup \
+          # -a "axivxno-bwb79529" \
+          # -u "sftraining" \
+          # -r "ACCOUNTADMIN" \
+          # -d "STREAMLIT_DB" \
+          # -s "STREAMLIT_SCHEMA" \
+          # -w "YOUR_WAREHOUSE" \
+          # --create-change-history-table
           #schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
 
