@@ -33,10 +33,24 @@ jobs:
         
       
         run: |
+
           mkdir -p ~/.snowflake
-          cp ./config/config.toml ~/.snowflake/config.toml
-          echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
+          cat <<EOF > ~/.snowflake/config.toml
+          [connections.default]
+          account = "axivxno-bwb79529"
+          region = "us-west-2"
+          role = "ACCOUNTADMIN"
+          schema = "STREAMLIT_SCHEMA"
+          database = "STREAMLIT_DB"
+          user = "sftraining"
+          password = "$SNOWFLAKE_PASSWORD"
+          EOF
           chmod 0600 ~/.snowflake/config.toml
+    
+          # mkdir -p ~/.snowflake
+          # cp ./config/config.toml ~/.snowflake/config.toml
+          # echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
+          # chmod 0600 ~/.snowflake/config.toml
           
       - name: Run schemachange
         
