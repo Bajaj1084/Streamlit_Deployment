@@ -39,8 +39,9 @@ jobs:
           
 
           python --version
-          echo "Step 1: Installing schemachange"
+          echo "Step 1: Installing schemachange and snowflake CLI"
           pip install schemachange==3.7.0
+          pip install snowflake-cli-labs
           
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.Streamlit_CHANGE_HISTORY --create-change-history-table
