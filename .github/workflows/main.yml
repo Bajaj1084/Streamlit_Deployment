@@ -50,14 +50,10 @@ jobs:
       - name: 'Create config'
         shell: bash
         env:
-            SNOWFLAKE_PASSWORD: ${{ secrets.SNOWCLI_PW }}
+            SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
             
         
         run: |
-          # mkdir -p ~/.snowflake
-          # cp config.toml ~/.snowflake/config.toml
-          # echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
-          # chmod 0600 ~/.snowflake/config.toml
   
   
           if [[ "${{ github.ref_name }}" == "main" ]]; then
