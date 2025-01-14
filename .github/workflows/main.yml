@@ -40,6 +40,10 @@ jobs:
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo $SF_ACCOUNT
           echo $SNOWFLAKE_PASSWORD
+          echo $SF_USERNAME
+          echo $SF_ROLE
+          echo $SF_WAREHOUSE
+          echo $SF_DATABASE
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange
