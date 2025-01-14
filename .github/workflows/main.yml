@@ -33,7 +33,15 @@ jobs:
           SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.SF_DATABASE }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+          
         run: |
+          echo "Debugging Environment Variables:"
+          echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}"
+          echo "SF_ACCOUNT length: ${#SF_ACCOUNT}"
+          echo "SF_USERNAME length: ${#SF_USERNAME}"
+          echo "SF_ROLE length: ${#SF_ROLE}"
+          echo "SF_WAREHOUSE length: ${#SF_WAREHOUSE}"
+          echo "SF_DATABASE length: ${#SF_DATABASE}"
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
