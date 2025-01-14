@@ -36,7 +36,7 @@ jobs:
           mkdir -p ~/.snowflake
           cp ./config/config.toml ~/.snowflake/config.toml
           echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
-          echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
+          echo "User = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
           chmod 0600 ~/.snowflake/config.toml
           
       - name: Run schemachange
