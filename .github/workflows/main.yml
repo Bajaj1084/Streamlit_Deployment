@@ -25,6 +25,17 @@ jobs:
         with:
           python-version: 3.8.x
 
+      - name: Debug Snowflake Password
+        run: |
+          if [ -z "${SNOWFLAKE_PASSWORD}" ]; then
+            echo "SNOWFLAKE_PASSWORD is empty or undefined."
+            exit 1
+          else
+            echo "SNOWFLAKE_PASSWORD is defined."
+          fi
+        env:
+          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+
       - name: Run schemachange
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
