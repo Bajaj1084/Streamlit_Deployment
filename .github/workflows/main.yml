@@ -60,6 +60,7 @@ jobs:
       - name: Debug Environment Variables
         run: |
             echo "Password length: ${#SNOWFLAKE_PASSWORD}"
+            echo "Pass: ${#secrets.SF_PASSWORD }"
     
       - name: Run schemachange
         
