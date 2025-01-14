@@ -25,28 +25,28 @@ jobs:
         with:
           python-version: 3.8.x
               
-        
+
+      - name: 'Create config'
+        shell: bash
+        env:
+          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+          
+      
+        run: |
+          mkdir -p ~/.snowflake
+          cp ./Setup/config.toml ~/.snowflake/config.toml
+          echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml
+          chmod 0600 ~/.snowflake/config.toml
 
       - name: Run schemachange
-        env:
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_DATABASE: ${{ secrets.SF_DATABASE }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+        
+          
         run: |
          
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          echo $SF_ACCOUNT
-          echo $SNOWFLAKE_PASSWORD
-          echo $SF_USERNAME
-          echo $SF_ROLE
-          echo $SF_WAREHOUSE
-          echo $SF_DATABASE
+          
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange
           
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -p $SNOWFLAKE_PASSWORD -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/Setup -c ~/.snowflake/config.toml --create-change-history-table
