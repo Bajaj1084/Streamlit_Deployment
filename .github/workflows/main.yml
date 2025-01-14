@@ -25,6 +25,9 @@ jobs:
         with:
           python-version: 3.8.x
 
+      - name: Print environment variables
+        run: env
+        
       - name: Run schemachange
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
