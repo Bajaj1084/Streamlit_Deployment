@@ -25,17 +25,6 @@ jobs:
         with:
           python-version: 3.8.x
 
-      - name: Debug Snowflake Password
-        run: |
-          if [ -z "${SNOWFLAKE_PASSWORD}" ]; then
-            echo "SNOWFLAKE_PASSWORD is empty or undefined."
-            exit 1
-          else
-            echo "SNOWFLAKE_PASSWORD is defined."
-          fi
-        env:
-          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
-
       - name: Run schemachange
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
@@ -45,27 +34,30 @@ jobs:
           SF_DATABASE: ${{ secrets.SF_DATABASE }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
  
-          
         run: |
-          echo "SF_ACCOUNT=$SF_ACCOUNT" >> env_debug.log
-          echo "SF_USERNAME=$SF_USERNAME" >> env_debug.log
-          echo "SF_ROLE=$SF_ROLE" >> env_debug.log
-          echo "SF_WAREHOUSE=$SF_WAREHOUSE" >> env_debug.log
-          echo "SF_DATABASE=$SF_DATABASE" >> env_debug.log
-          echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}" >> env_debug.log
+          
 
-    
-          echo "Debugging Environment Variables:"
-          echo "SNOWFLAKE_PASSWORD length: ${#SNOWFLAKE_PASSWORD}"
-          echo "SF_ACCOUNT length: ${#SF_ACCOUNT}"
-          echo "SF_USERNAME length: ${#SF_USERNAME}"
-          echo "SF_ROLE length: ${#SF_ROLE}"
-          echo "SF_WAREHOUSE length: ${#SF_WAREHOUSE}"
-          echo "SF_DATABASE length: ${#SF_DATABASE}"
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange==3.7.0
           
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/Setup -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.Streamlit_CHANGE_HISTORY --create-change-history-table
+
+      - name: 'Deploy the Streamlit app'
+        shell: bash
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            env_directory="./prod"
+          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
+            env_directory="./dev"
+          elif [[ "${{ github.ref_name }}" == "test" ]]; then
+            env_directory="./test"
+          else
+            echo "Error: Invalid branch name."
+            exit 1
+          fi
+          
+          echo "Using environment directory: $env_directory"
+          cd $env_directory
+          snow streamlit deploy --replace
