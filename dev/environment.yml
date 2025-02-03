@@ -1,5 +1,9 @@
 name: sf_env
 channels:
   - snowflake
+  - conda-forge
 dependencies:
+  - python=3.8
   - streamlit
+  - snowflake-connector-python
+  - snowflake-ml-python
