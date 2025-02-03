@@ -1,3 +1,2 @@
 streamlit==1.25.0
-snowflake-snowpark-python==3.11
-snowflake-ml-python==3.11 
+
